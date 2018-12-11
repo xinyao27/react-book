@@ -143,3 +143,24 @@ return (
 我们已经了解了 React.js 基本环境安装以及 JSX 相关内容。从本章开始，我们将从零实现一个 `天气预报 app`，从中体会 `React` 的魅力所在。
 
 首先我们使用 `create-react-app` 工具生成项目。
+
+打开 `App.js` ，写入以下代码：
+```js
+import React from 'react';
+import './style.css';
+
+const App = () => (
+  <div className="RealTime">
+    <div className="temp">-2°</div>
+    <div className="weather">晴</div>
+    <div className="wind">北风 2级</div>
+    <div className="humidity">66%</div>
+  </div>
+);
+
+export default App;
+```
+我们可以直接通过 `import './style.css'` 引入样式。
+
+现在我们的项目变成了这样。
+![RealTime.png](https://i.loli.net/2018/12/11/5c0fc4b95de4d.png)

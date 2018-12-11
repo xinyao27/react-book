@@ -1,0 +1,22 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.RealTime {
+  padding-top: 60px;
+}
+
+.RealTime > div {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.RealTime .temp {
+  font-size: 56px;
+}
+
+.RealTime .weather {
+  font-size: 20px;
+}
