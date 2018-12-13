@@ -13,6 +13,7 @@ class App extends React.Component {
   }
 }
 ```
+组件类的组成必须有 `render` 方法，并且在 `render` 方法内返回 JSX。
 
 ### 条件渲染
 
@@ -142,7 +143,7 @@ return (
 
 我们已经了解了 React.js 基本环境安装以及 JSX 相关内容。从本章开始，我们将从零实现一个 `天气预报 app`，从中体会 `React` 的魅力所在。
 
-首先我们使用 `create-react-app` 工具生成项目。
+首先我们使用 `create-react-app` 工具生成项目。（项目不针对样式着重讲解，可忽略样式相关内容）
 
 打开 `App.js` ，写入以下代码：
 ```js
@@ -161,6 +162,8 @@ const App = () => (
 export default App;
 ```
 我们可以直接通过 `import './style.css'` 引入样式。
+这样我们就实现了一个展示天气信息的组件。
 
-现在我们的项目变成了这样。
 ![RealTime.png](https://i.loli.net/2018/12/11/5c0fc4b95de4d.png)
+
+下一节我们将实现更多组件，并且将组件组合。
