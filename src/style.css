@@ -4,19 +4,66 @@
   box-sizing: border-box;
 }
 
+.app {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .RealTime {
   padding-top: 60px;
 }
-
 .RealTime > div {
   text-align: center;
   margin-bottom: 10px;
 }
-
 .RealTime .temp {
   font-size: 56px;
 }
-
 .RealTime .weather {
   font-size: 20px;
+}
+
+.WeatherDetails {
+  margin-top: 40px;
+  display: flex;
+  overflow-x: auto;
+}
+.WeatherDetails .Details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 14px;
+}
+.WeatherDetails .Details > div {
+  margin-bottom: 5px;
+}
+.WeatherDetails .Details .time {
+  color: #666;
+  font-size: 14px;
+}
+
+.Indexes {
+  margin-top: 40px;
+  display: flex;
+  flex-wrap: wrap;
+  border-top: 1px solid #ccc
+}
+.Indexes .Index {
+  flex: 33%;
+  text-align: center;
+  padding: 12px 0;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+.Indexes .Index:nth-of-type(3n) {
+  border-right: none;
+}
+.Indexes .Index .level {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+.Indexes .Index .name {
+  color: #999;
+  font-size: 12px;
 }
