@@ -6,6 +6,36 @@
 
 我们需要引入状态的概念，在 React 内组件可以通过维护 state 来维护组件内的状态，这意味着 state 只关心组件自己的内部状态，且这些状态只能在组件内改变。
 
+## state
+
+定义 state 的方式很简单：
+```js
+class Demo extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      name: 'frank',
+    };
+  }
+}
+```
+现在有新[提案](https://github.com/tc39/proposal-class-fields)，对实例属性有了新的写法(需要 babel 转义)
+```js
+class Demo extends React.Component {
+  state = {
+    name: 'frank',
+  };
+}
+```
+
+我们希望 state 是可以更改的，因为我们需要使用变化的 state 去实现动态可交互的组件。
+
+怎么修改 state 呢？直接赋值？`this.state.name = 'cxy'`。
+no no no，永远不要直接修改 state，这样做 React 并不会做出你所期望的操作，还有可能带来一些意想不到的 bug。
+
+正确的操作是使用 `setState` 修改 state。
+
 ## setState
 
 `setState` 是一个异步方法，例如：
