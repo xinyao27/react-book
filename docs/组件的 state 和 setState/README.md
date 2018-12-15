@@ -41,7 +41,7 @@ this.setState({
 });
 ```
 看上述例子，我们期望得到结果3，实际上得到了2。
-原因是第二个 `setState` 内的 count 依赖于上一次的 count，由于 `setState` 异步执行，`this.state.count + 2` 里的 count 仍然是0。
+原因是第二个 `setState` 内的 count 依赖于 `this.state.count`，由于 `setState` 异步执行，`this.state.count + 2` 里的 count 仍然是0。
 
 为了解决这种情况，我们将 `setState` 第一个参数改为函数返回对象的形式：
 ```js
