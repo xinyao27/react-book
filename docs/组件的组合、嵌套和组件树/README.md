@@ -72,35 +72,10 @@ class WeatherDetails extends React.Component {
 
 ![details.png](https://i.loli.net/2018/12/13/5c1270293efa2.png)
 
-似乎还不错，但是仔细看 `WeatherDetails` 组件内重复写了好多个 `<Details />`，我们可以通过更加优雅的方式改造这里：
-```js
-class WeatherDetails extends React.Component {
-  render() {
-    // 首先我们写一个 getDataSource 函数模拟一个数据源
-    const getDataSource = () => Array(7).fill({});
-    return (
-      <div className="WeatherDetails">
-        {
-          // map 我们生成的数组，返回组件
-          getDataSource().map(() => <Details />)
-        }
-      </div>
-    );
-  }
-}
-```
-这样写控制台会出现 warning ：`Each child in an array or iterator should have a unique "key" prop.`，
-意思是每个子组件都要有一个独一无二的 `key` 属性(请不要使用 index 作为 key)，例如：
-```js
-getDataSource().map(() => <Details key={xxx}/>)
-```
-这里我就先忽略这个警告继续了。
-
 在写一个展示各项生活指数的组件
 ```js
 class Indexes extends React.Component {
   render() {
-    const getDataSource = () => Array(6).fill({});
     const Index = () => (
       <div className="Index">
         <div className="level">适宜</div>
@@ -109,9 +84,12 @@ class Indexes extends React.Component {
     );
     return (
       <div className="Indexes">
-        {
-          getDataSource().map(() => <Index />)
-        }
+        <Index />
+        <Index />
+        <Index />
+        <Index />
+        <Index />
+        <Index />
       </div>
     );
   }
