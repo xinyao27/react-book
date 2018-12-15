@@ -88,6 +88,72 @@ class Button extends React.Component {
 
 ## defaultProps
 
+我们写函数时，经常会给参数加默认值，同样地 React 也给 props 提供了默认配置：通过定义静态变量 defaultProps 的方式定义。
 
+```js
+class Demo extends React.Component {
+  static defaultProps = {
+    name: 'cxy'
+  }
+
+  render() {
+    return (
+      <div>{this.props.name}</div>
+    )
+  }
+}
+
+<Demo />
+```
+上例中我们调用 Demo 组件却没有传入 name，此时会直接使用 `defaultProps` 中的默认属性，从而保证了渲染后始终有值。
 
 ## propTypes
+
+propTypes 用来记录传递给组件的预期属性类型。
+
+在开发环境下 React 将会根据定义的 propTypes 检查传递给组件的 props，如果不匹配，将在控制台内 warning，在生产环境下则不进行检查。
+
+###  Importing
+
+React 16 以前：
+```js
+import React, { PropTypes } from 'react';
+```
+从 React 16 开始，PropTypes 被放在一个独立的npm包 [prop-types](https://github.com/facebook/prop-types) 里。
+
+在 React 16 以后的项目内，需要单独安装 `prop-types`：
+```
+npm install --save prop-types
+```
+import：
+```js
+import PropTypes from 'prop-types';
+```
+
+### 定义 propTypes
+
+我们这里列举一些常用的 propTypes
+```js
+import PropTypes from 'prop-types';
+
+class Demo extends React.Component {
+  static propTypes = {
+    optionalArray: PropTypes.array,
+    optionalBool: PropTypes.bool,
+    optionalFunc: PropTypes.func,
+    optionalNumber: PropTypes.number,
+    optionalObject: PropTypes.object,
+    optionalString: PropTypes.string,
+    optionalSymbol: PropTypes.symbol,
+    optionalAny: PropTypes.any,
+    optionalRequired: PropTypes.any.isRequired,
+  }
+
+  // ...
+}
+```
+当然除了上述基本类型以外，`prop-types` 还支持枚举类型和自定义类型等，有兴趣的可自行了解。
+
+## 实战
+
+TODO
