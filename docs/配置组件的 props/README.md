@@ -153,7 +153,3 @@ class Demo extends React.Component {
 }
 ```
 当然除了上述基本类型以外，`prop-types` 还支持枚举类型和自定义类型等，有兴趣的可自行了解。
-
-## 实战
-
-TODO
