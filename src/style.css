@@ -9,14 +9,18 @@ html, body, #root {
 }
 
 .app {
-  height: 100%;
+  max-width: 375px;
+  max-height: 667px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   overflow-x: hidden;
   overflow-y: auto;
 }
 
 .city {
   text-align: center;
-  margin-top: 30px;
 }
 .city .dialog {
   width: 100%;
