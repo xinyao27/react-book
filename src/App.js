@@ -1,6 +1,7 @@
 import React from 'react';
 import './style.css';
 import Moment from 'moment';
+import { cities } from './static/city.json';
 
 class RealTime extends React.Component {
   render() {
@@ -67,6 +68,75 @@ class Indexes extends React.Component {
   }
 }
 
+class City extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      visible: false,
+      input: '',
+    }
+
+    this.handleVisible = this.handleVisible.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+  }
+
+  handleVisible() {
+    this.setState({
+      visible: true,
+    });
+  }
+
+  handleChange(e) {
+    this.setState({
+      input: e.target.value,
+    });
+  }
+
+  handleSearch() {
+    const { input } = this.state;
+    if (input) {
+      const result = cities.find(item => item.city === input);
+      if (result) {
+        // 更新天气并关闭当前弹框
+        this.props.onCityChange(result.cityid);
+        this.setState({
+          visible: false,
+          input: '', // 关闭弹框后清空输入
+        });
+      } else {
+        alert('没有查询到相应城市')
+      }
+    } else {
+      alert('没有输入要查询的城市')
+    }
+  }
+
+  render() {
+    const city = this.props.data;
+    const { visible, input } = this.state;
+    return (
+      <div className="city">
+        <div onClick={this.handleVisible}>{city}</div>
+        {
+          visible && (
+            <div className="dialog">
+              <input
+                type="text"
+                placeholder="搜索市"
+                value={input}
+                onChange={this.handleChange}
+              />
+              <button onClick={this.handleSearch}>查询</button>
+            </div>
+          )
+        }
+      </div>
+    )
+  }
+}
+
 class App extends React.Component {
   state = {
     city: null,
@@ -75,11 +145,11 @@ class App extends React.Component {
     indexesData: [],
   }
 
-  componentDidMount() {
-    fetch('/app/weather/listWeather?cityIds=101240101')
+  // 将请求数据抽离，可复用
+  getData(id) {
+    fetch(`/app/weather/listWeather?cityIds=${id}`)
       .then(res => res.json())
       .then((res) => {
-        console.log(res)
         if (res.code === '200' && res.value.length) {
           const { city, realtime, weatherDetailsInfo, indexes } = res.value[0];
           const { weather3HoursDetailsInfos } = weatherDetailsInfo;
@@ -93,11 +163,20 @@ class App extends React.Component {
       });
   }
 
+  componentDidMount() {
+    // 默认请求北京的天气，当然可以拓展 例如利用定位获取当前位置，或者要求用户输入位置
+    this.getData('101010100');
+  }
+
+  handleCityChange = cityid => {
+    this.getData(cityid);
+  }
+
   render() {
     const { city, realTimeData, weatherDetailsData, indexesData } = this.state;
     return (
       <div className="app">
-        <div className="city">{city}</div>
+        <City data={city} onCityChange={this.handleCityChange}/>
         <RealTime data={realTimeData}/>
         <WeatherDetails data={weatherDetailsData} />
         <Indexes data={indexesData}/>

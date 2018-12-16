@@ -18,6 +18,29 @@ html, body, #root {
   text-align: center;
   margin-top: 30px;
 }
+.city .dialog {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(0, 0, 0, .8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.city .dialog input {
+  width: 80%;
+  height: 36px;
+  text-indent: 12px;
+}
+.city .dialog button {
+  width: 40%;
+  height: 28px;
+  background-color: #fff;
+  margin-top: 20px;
+}
 
 .RealTime {
   margin-top: 40px;
