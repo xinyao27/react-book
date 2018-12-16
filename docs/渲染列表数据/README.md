@@ -61,4 +61,205 @@ Warning: Each child in an array or iterator should have a unique "key" prop.
 
 ## 实战
 
-TODO
+为了提高效率降低成本，我们将在 App 组件内发起请求拿到数据，将数据进行简单封装后通过 props 传给各个组件。
+
+首先我们改写 App 组件：
+```js
+class App extends React.Component {
+  render() {
+    return (
+      <div className="app">
+        <RealTime />
+        <WeatherDetails />
+        <Indexes />
+      </div>
+    );
+  }
+}
+```
+发送请求，封装数据：
+```js
+class App extends React.Component {
+  state = {
+    realTimeData: null,
+    weatherDetailsData: null,
+    indexesData: null,
+  }
+
+  componentDidMount() {
+    fetch('/app/weather/listWeather?cityIds=101240101')
+      .then(res => res.json())
+      .then((res) => {
+        if (res.code === '200' && res.value.length) {
+          const { weatherDetailsInfo } = res.value[0];
+          const { weather3HoursDetailsInfos } = weatherDetailsInfo;
+          this.setState({
+            weatherDetailsData: weather3HoursDetailsInfos,
+          });
+        }
+      });
+  }
+
+  render() {
+    const { weatherDetailsData } = this.state;
+    return (
+      <div className="app">
+        <RealTime />
+        <WeatherDetails data={weatherDetailsData} />
+        <Indexes />
+      </div>
+    );
+  }
+}
+```
+然后我们开始改写 WeatherDetails 及 Details 组件，使用传入的 props 渲染数据：
+```js
+import Moment from 'moment'; // 这里使用 moment 格式化时间 需要预先安装 `npm i moment --save`
+
+class Details extends React.Component {
+  render() {
+    const { data } = this.props;
+    const time = Moment(data.startTime).format('HH:mm');
+    const weather = data.weather;
+    const temperature = `${data.highestTemperature}°`;
+    return (
+      <div className="Details">
+        <div className="time">{time}</div>
+        <div className="weather">{weather}</div>
+        <div className="temperature">{temperature}</div>
+      </div>
+    );
+  }
+}
+
+class WeatherDetails extends React.Component {
+  render() {
+    const { data } = this.props;
+    return (
+      <div className="WeatherDetails">
+        {
+          // map 返回了一个内容为 JSX 的数组
+          data && data.map(detail => <Details data={detail} key={detail.startTime}/>)
+        }
+      </div>
+    );
+  }
+}
+```
+同样的，对于 Indexes 组件我们也用同样的方式处理，首先修改组件 App：
+```js
+class App extends React.Component {
+  state = {
+    realTimeData: null,
+    weatherDetailsData: null,
+    indexesData: null,
+  }
+
+  componentDidMount() {
+    fetch('/app/weather/listWeather?cityIds=101240101')
+      .then(res => res.json())
+      .then((res) => {
+        if (res.code === '200' && res.value.length) {
+          const { weatherDetailsInfo, indexes } = res.value[0];
+          const { weather3HoursDetailsInfos } = weatherDetailsInfo;
+          this.setState({
+            weatherDetailsData: weather3HoursDetailsInfos,
+            indexesData: indexes,
+          });
+        }
+      });
+  }
+
+  render() {
+    const { weatherDetailsData, indexesData } = this.state;
+    return (
+      <div className="app">
+        <RealTime />
+        <WeatherDetails data={weatherDetailsData} />
+        <Indexes data={indexesData}/>
+      </div>
+    );
+  }
+}
+```
+修改 Indexes 组件：
+```js
+class Indexes extends React.Component {
+  render() {
+    const { data } = this.props;
+    const Index = ({ data }) => (
+      <div className="Index">
+        <div className="level">{data.level}</div>
+        <div className="name">{data.name}</div>
+      </div>
+    );
+    return (
+      <div className="Indexes">
+        {
+          data && data.map(index => <Index data={index} key={index.abbreviation}/>)
+        }
+      </div>
+    );
+  }
+}
+```
+
+之前写 RealTime 组件时，我们在组件内请求了一次数据，这与 App 内发送的请求重复了，我们重构一下：
+```js
+// App 组件
+class App extends React.Component {
+  state = {
+    realTimeData: null,
+    weatherDetailsData: null,
+    indexesData: null,
+  }
+
+  componentDidMount() {
+    fetch('/app/weather/listWeather?cityIds=101240101')
+      .then(res => res.json())
+      .then((res) => {
+        if (res.code === '200' && res.value.length) {
+          const { realtime, weatherDetailsInfo, indexes } = res.value[0];
+          const { weather3HoursDetailsInfos } = weatherDetailsInfo;
+          this.setState({
+            realTimeData: realtime,
+            weatherDetailsData: weather3HoursDetailsInfos,
+            indexesData: indexes,
+          });
+        }
+      });
+  }
+
+  render() {
+    const { realTimeData, weatherDetailsData, indexesData } = this.state;
+    return (
+      <div className="app">
+        <RealTime data={realTimeData}/>
+        <WeatherDetails data={weatherDetailsData} />
+        <Indexes data={indexesData}/>
+      </div>
+    );
+  }
+}
+
+// RealTime 组件
+class RealTime extends React.Component {
+  render() {
+    const {
+      temp, weather, wD: windType, wS: windLevel, sD: humidity,
+    } = this.props.data;
+    return (
+      <div className="RealTime">
+        <div className="temp">{temp}</div>
+        <div className="weather">{weather}</div>
+        <div className="wind">{`${windType} ${windLevel}`}</div>
+        <div className="humidity">{`湿度 ${humidity}%`}</div>
+      </div>
+    );
+  }
+}
+```
+
+## 最后
+
+至此，我们的实战已经可以正确渲染列表数据了。下一节，我们将让程序可以根据用户输入的地点查询天气。

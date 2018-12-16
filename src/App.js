@@ -1,46 +1,12 @@
 import React from 'react';
 import './style.css';
+import Moment from 'moment';
 
 class RealTime extends React.Component {
-  constructor() {
-    super();
-
-    this.state = {
-      temp: -5,
-      weather: '晴',
-      windType: '南风',
-      windLevel: '3级',
-      humidity: 48,
-    };
-  }
-
-  componentDidMount() {
-    // 如遇跨域问题 `create-react-app` 生成的项目可在 `package.json` 内新添
-    // "proxy": "http://aider.meizu.com"
-    fetch('/app/weather/listWeather?cityIds=101240101')
-      .then(res => res.json())
-      .then((res) => {
-        if (res.code === '200' && res.value.length) {
-          const { realtime } = res.value[0];
-          const {
-            temp, weather, wD: windType, wS: windLevel, sD: humidity,
-          } = realtime;
-          // 调用 setState 改变 state
-          this.setState({
-            temp,
-            weather,
-            windType,
-            windLevel,
-            humidity,
-          });
-        }
-      });
-  }
-
   render() {
     const {
-      temp, weather, windType, windLevel, humidity,
-    } = this.state;
+      temp, weather, wD: windType, wS: windLevel, sD: humidity,
+    } = this.props.data;
     return (
       <div className="RealTime">
         <div className="temp">{temp}</div>
@@ -54,11 +20,15 @@ class RealTime extends React.Component {
 
 class Details extends React.Component {
   render() {
+    const { data } = this.props;
+    const time = Moment(data.startTime).format('HH:mm');
+    const weather = data.weather;
+    const temperature = `${data.highestTemperature}°`;
     return (
       <div className="Details">
-        <div className="time">01:00</div>
-        <div className="weather">阴</div>
-        <div className="temperature">-1°</div>
+        <div className="time">{time}</div>
+        <div className="weather">{weather}</div>
+        <div className="temperature">{temperature}</div>
       </div>
     );
   }
@@ -66,13 +36,12 @@ class Details extends React.Component {
 
 class WeatherDetails extends React.Component {
   render() {
-    // 首先我们写一个 getDataSource 函数模拟一个数据源
-    const getDataSource = () => Array(7).fill({});
+    const { data } = this.props;
     return (
       <div className="WeatherDetails">
         {
-          // map 我们生成的数组，返回组件
-          getDataSource().map(() => <Details />)
+          // map 返回了一个内容为 JSX 的数组
+          data && data.map(detail => <Details data={detail} key={detail.startTime}/>)
         }
       </div>
     );
@@ -81,29 +50,56 @@ class WeatherDetails extends React.Component {
 
 class Indexes extends React.Component {
   render() {
-    const getDataSource = () => Array(6).fill({});
-    const Index = () => (
+    const { data } = this.props;
+    const Index = ({ data }) => (
       <div className="Index">
-        <div className="level">适宜</div>
-        <div className="name">洗车指数</div>
+        <div className="level">{data.level}</div>
+        <div className="name">{data.name}</div>
       </div>
     );
     return (
       <div className="Indexes">
         {
-          getDataSource().map(() => <Index />)
+          data && data.map(index => <Index data={index} key={index.abbreviation}/>)
         }
       </div>
     );
   }
 }
 
-const App = () => (
-  <div className="app">
-    <RealTime />
-    <WeatherDetails />
-    <Indexes />
-  </div>
-);
+class App extends React.Component {
+  state = {
+    realTimeData: [],
+    weatherDetailsData: [],
+    indexesData: [],
+  }
+
+  componentDidMount() {
+    fetch('/app/weather/listWeather?cityIds=101240101')
+      .then(res => res.json())
+      .then((res) => {
+        if (res.code === '200' && res.value.length) {
+          const { realtime, weatherDetailsInfo, indexes } = res.value[0];
+          const { weather3HoursDetailsInfos } = weatherDetailsInfo;
+          this.setState({
+            realTimeData: realtime,
+            weatherDetailsData: weather3HoursDetailsInfos,
+            indexesData: indexes,
+          });
+        }
+      });
+  }
+
+  render() {
+    const { realTimeData, weatherDetailsData, indexesData } = this.state;
+    return (
+      <div className="app">
+        <RealTime data={realTimeData}/>
+        <WeatherDetails data={weatherDetailsData} />
+        <Indexes data={indexesData}/>
+      </div>
+    );
+  }
+}
 
 export default App;
