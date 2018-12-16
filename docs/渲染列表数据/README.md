@@ -57,7 +57,7 @@ Warning: Each child in an array or iterator should have a unique "key" prop.
 
 回到我们上述的例子，当我们需要将数组内 `list 1` 和 `list2` 元素调换位置时，React 会认为他们是分别改变了自己而不是仅仅调换位置，从而导致 React 将两个元素重新渲染，这样无疑加大了 Dom 操作成本。
 
-怎么解决呢？我们给数组内的每一个元素加一个 prop: key，并且保证每个元素的 key 都是自己独有的（就像给每个元素一个身份证）这样 React 就可以根据 key 知道二者仅仅是调换了位置。
+怎么解决呢？我们给数组内的每一个元素加一个 prop: key，并且保证每个元素的 key 都是自己独有的（就像给每个元素一个身份证）这样 React 就可以根据 key 知道二者仅仅是调换了位置。
 
 ## 实战
 
