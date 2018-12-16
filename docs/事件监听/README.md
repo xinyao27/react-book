@@ -19,7 +19,7 @@ function handleClick() {
 
 ### 相同
 
-React 事件与原生浏览器事件拥有同样的接口，同样支持事件的冒泡机制：使用 `stopPropagation()` 和 `preventDefault()` 来中断。
+React 事件与原生浏览器事件拥有同样的接口，同样支持事件的冒泡机制：使用 `stopPropagation()` 和 `preventDefault()` 来中断。
 
 举个栗子：
 ```js
@@ -37,9 +37,9 @@ function handleClick(e) {
 
 ## this
 
-this 一直是一个令 JavaScript 初学者头疼的东西，如果你对 this 一点不了解的话推荐你看一下 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this) 对 this 的讲解。简单讲，this 就是指向方法的调用者。
+this 一直是一个令 JavaScript 初学者头疼的东西，如果你对 this 一点不了解的话推荐你看一下 [MDN](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/this) 对 this 的讲解。简单讲，this 就是指向方法的调用者。
 
-使用 `class component` 并且绑定事件时，不可避免的要手动实现 this 的绑定。
+使用 `class component` 并且绑定事件时，不可避免的要手动实现 this 的绑定。
 
 列举几种绑定 this 的方式：
 
@@ -254,7 +254,7 @@ class City extends React.Component {
 
 就差最后一步了，点击查询按钮获取到输入框内输入的城市的天气。
 
-由于我们接口传入的是城市的 id，我找到了一份市区 id 对应的[json数据](https://github.com/chenyueban/react-book/tree/master/src/static/city.json)用于查询输入城市对应的 id：
+由于我们接口传入的是城市的 id，我找到了一份市区 id 对应的[json数据](https://github.com/chenyueban/react-book/tree/master/src/static/city.json)用于查询输入城市对应的 id：
 ```js
 import { cities } from './static/city.json';
 
@@ -372,3 +372,7 @@ this.props.onCityChange(result.cityid)
 ```
 
 好啦到这里我们的实战就完成啦。[实战源码](https://github.com/chenyueban/react-book)
+
+我们的实战仍然有优化的空间，例如将各个组件分别写入不同的文件内，最后在 App.js 内统一引入各个组件。
+
+希望这些内容能对大家有所帮助。
