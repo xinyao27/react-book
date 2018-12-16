@@ -14,8 +14,13 @@ html, body, #root {
   overflow-y: auto;
 }
 
+.city {
+  text-align: center;
+  margin-top: 30px;
+}
+
 .RealTime {
-  padding-top: 60px;
+  margin-top: 40px;
 }
 .RealTime > div {
   text-align: center;

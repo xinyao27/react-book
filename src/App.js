@@ -69,6 +69,7 @@ class Indexes extends React.Component {
 
 class App extends React.Component {
   state = {
+    city: null,
     realTimeData: [],
     weatherDetailsData: [],
     indexesData: [],
@@ -78,10 +79,12 @@ class App extends React.Component {
     fetch('/app/weather/listWeather?cityIds=101240101')
       .then(res => res.json())
       .then((res) => {
+        console.log(res)
         if (res.code === '200' && res.value.length) {
-          const { realtime, weatherDetailsInfo, indexes } = res.value[0];
+          const { city, realtime, weatherDetailsInfo, indexes } = res.value[0];
           const { weather3HoursDetailsInfos } = weatherDetailsInfo;
           this.setState({
+            city,
             realTimeData: realtime,
             weatherDetailsData: weather3HoursDetailsInfos,
             indexesData: indexes,
@@ -91,9 +94,10 @@ class App extends React.Component {
   }
 
   render() {
-    const { realTimeData, weatherDetailsData, indexesData } = this.state;
+    const { city, realTimeData, weatherDetailsData, indexesData } = this.state;
     return (
       <div className="app">
+        <div className="city">{city}</div>
         <RealTime data={realTimeData}/>
         <WeatherDetails data={weatherDetailsData} />
         <Indexes data={indexesData}/>
