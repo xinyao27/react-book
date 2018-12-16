@@ -9,7 +9,7 @@ class RealTime extends React.Component {
     } = this.props.data;
     return (
       <div className="RealTime">
-        <div className="temp">{temp}</div>
+        <div className="temp">{`${temp}°`}</div>
         <div className="weather">{weather}</div>
         <div className="wind">{`${windType} ${windLevel}`}</div>
         <div className="humidity">{`湿度 ${humidity}%`}</div>
